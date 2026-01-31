@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Flowchart - Database Management Tool</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .mermaid {
+            margin: 20px 0;
+        }
+        .legend {
+            margin-top: 40px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .legend h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .legend ul {
+            padding-left: 20px;
+        }
+        .legend li {
+            margin: 8px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+            }
+            button {
+                display: none;
+            }
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Database Management Tool - System Flowchart</h1>
+        
+        <div class="mermaid">
+        flowchart TD
+            subgraph Frontend[Frontend - React/TypeScript]
+                A[Login Page] -->|Authentication| B[Dashboard]
+                B --> C[SQL Workbench]
+                B --> D[Schema Workbench]
+                B --> E[MongoDB Workbench]
+                B --> F[Chatbot Interface]
+                
+                C -->|Query Execution| G[SQL Results]
+                D -->|Schema Visualization| H[ER Diagrams]
+                E -->|Query Execution| I[MongoDB Results]
+                F -->|AI Assistance| J[Chat Responses]
+            end
+
+            subgraph Backend[Backend - FastAPI]
+                K[Authentication Router]
+                L[SQL Router]
+                M[Schema Router]
+                N[MongoDB Router]
+                O[Chatbot Router]
+                
+                K <-->|JWT Tokens| A
+                L <--> C
+                M <--> D
+                N <--> E
+                O <--> F
+            end
+
+            subgraph Database[Databases]
+                P[(MySQL/MariaDB)]
+                Q[(MongoDB)]
+                
+                L <--> P
+                M <--> P
+                N <--> Q
+            end
+
+            subgraph ExternalServices[External Services]
+                R[Mistral AI API]
+                O -->|API Calls| R
+            end
+
+            style Frontend fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+            style Backend fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+            style Database fill:#fff3e0,stroke:#e65100,stroke-width:2px
+            style ExternalServices fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
+        </div>
+
+        <div class="legend">
+            <h3>Legend</h3>
+            <ul>
+                <li><strong>Frontend</strong>: React/TypeScript based user interface</li>
+                <li><strong>Backend</strong>: FastAPI server handling API requests</li>
+                <li><strong>Databases</strong>: MySQL/MariaDB and MongoDB data storage</li>
+                <li><strong>External Services</strong>: Integration with Mistral AI for chatbot functionality</li>
+                <li><strong>Arrows</strong>: Show data flow and component interactions</li>
+            </ul>
+        </div>
+
+        <div class="mermaid">
+        sequenceDiagram
+            participant U as User
+            participant FE as Frontend
+            participant BE as Backend
+            participant DB as Database
+            
+            U->>FE: Interacts with UI
+            FE->>BE: API Request (REST/GraphQL)
+            BE->>DB: Query Database
+            DB-->>BE: Return Results
+            BE-->>FE: JSON Response
+            FE->>U: Update UI
+            
+            Note over U,FE: For Chatbot:
+            FE->>BE: Send Message
+            BE->>Mistral: Forward to AI API
+            Mistral-->>BE: AI Response
+            BE-->>FE: Return Response
+        </div>
+
+        <div class="mermaid">
+        stateDiagram-v2
+            [*] --> NotAuthenticated
+            NotAuthenticated --> Authenticated: Login Success
+            Authenticated --> [*]: Logout
+            
+            state Authenticated {
+                [*] --> Dashboard
+                Dashboard --> SQLWorkbench: Navigate
+                Dashboard --> SchemaWorkbench: Navigate
+                Dashboard --> MongoDBWorkbench: Navigate
+                Dashboard --> Chatbot: Navigate
+                
+                state SQLWorkbench {
+                    [*] --> QueryInput
+                    QueryInput --> Results: Execute
+                    Results --> QueryInput: New Query
+                }
+                
+                state SchemaWorkbench {
+                    [*] --> SchemaView
+                    SchemaView --> TableDetails: Select Table
+                    TableDetails --> SchemaView: Back
+                }
+                
+                state Chatbot {
+                    [*] --> ChatInterface
+                    ChatInterface --> AIProcessing: Send Message
+                    AIProcessing --> ChatInterface: Display Response
+                }
+            }
+        </div>
+
+        <div class="footer">
+            <p>Generated on: November 15, 2025</p>
+            <p>Database Management Tool - Version 1.0.0</p>
+        </div>
+    </div>
+
+    <button onclick="window.print()">Save as PDF</button>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            },
+            themeVariables: {
+                primaryColor: '#e3f2fd',
+                primaryTextColor: '#000',
+                primaryBorderColor: '#1976d2',
+                lineColor: '#666',
+                secondaryColor: '#e8f5e9',
+                tertiaryColor: '#fff3e0'
+            }
+        });
+    </script>
+</body>
+</html>
